@@ -11,6 +11,7 @@ struct Livro
     int quant;
 };
 
+// funções utilitárias
 
 void mostrar_livro(Livro livro)
 {
@@ -38,6 +39,7 @@ int livro_existe(vector<Livro> &acervo, string titulo)
     return index;
 }
 
+// funções 
 
 void menu()
 {
@@ -96,8 +98,6 @@ void buscar_livro(vector<Livro> &acervo, string titulo)
     {
         mostrar_livro(acervo[index]);
     }
-
-    acervo.erase(acervo.begin()+0);
 }
 
 void editar_livro(vector<Livro>, string)
