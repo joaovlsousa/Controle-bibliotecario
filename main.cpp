@@ -12,6 +12,33 @@ struct Livro
 };
 
 
+void mostrar_livro(Livro livro)
+{
+    cout << endl << "-------------------------------------------" << endl;
+    cout << "Título: " << livro.titulo << endl;
+    cout << "Autor: " << livro.autor << endl;
+    cout << "Preço: " << livro.preco << endl;
+    cout << "Disponíveis: " << livro.quant << endl;
+    cout << "-------------------------------------------" << endl;
+}
+
+int livro_existe(vector<Livro> &acervo, string titulo)
+{
+    int tam = acervo.size();
+    int index = -1;
+
+    for(int i = 0; i < tam; i++)
+    {
+        if(acervo[i].titulo == titulo)
+        {
+            index = i;
+        }
+    }
+
+    return index;
+}
+
+
 void menu()
 {
     cout << endl << "---------- Sistema Bibliotecário ----------" << endl;
@@ -47,11 +74,31 @@ void cadastrar_livro(vector<Livro> &acervo)
     cout << endl << "Livro cadastrado com sucesso!" << endl;
 }
 
-void listar_livros(vector<Livro>)
-{}
+void listar_livros(vector<Livro> &acervo)
+{
+    int tam = acervo.size();
 
-void buscar_livro(vector<Livro>, string)
-{}
+    for(int i = 0; i < tam; i++)
+    {
+        mostrar_livro(acervo[i]);
+    }
+}
+
+void buscar_livro(vector<Livro> &acervo, string titulo)
+{
+    int index = livro_existe(acervo, titulo);
+
+    if(index < 0)
+    {
+        cout << "O livro " << titulo << " não está no nosso acervo." << endl;
+    }
+    else
+    {
+        mostrar_livro(acervo[index]);
+    }
+
+    acervo.erase(acervo.begin()+0);
+}
 
 void editar_livro(vector<Livro>, string)
 {}
@@ -103,14 +150,11 @@ int main()
 
             excluir_livro(acervo, titulo);
             break;
-        
-        default:
-            cout << "Encerrando a execução do programa...";
-            break;
         }
 
     } while (op != 0);
-    
+
+    cout << "Encerrando a execução do programa...";    
 
     return 0;
 }
