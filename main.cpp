@@ -47,6 +47,15 @@ Livro livro_existe(Acervo *estoque, string titulo) {
     return livro_inexistente;
 }
 
+Acervo * buscar_endereco(Acervo *estoque, string titulo) {
+    Acervo *pos = estoque;
+
+    while (pos->livro.titulo != titulo)
+        pos = pos->prox;
+    
+    return pos;
+}
+
 //FUNÇÕES
 
 void menu() {
@@ -130,9 +139,34 @@ void buscar_livro(Acervo *estoque, string titulo) {
         imprimir_livro(checar_Livro); 
 }
 
-void editar_livro() {
 
+void editar_livro(Acervo *estoque, string titulo) {
+    Livro checar_livro = livro_existe(estoque, titulo);
+
+    if (checar_livro.quant < 0)
+        cout << endl << "O livro não existe no estoque." << endl;
+
+    else {
+        Acervo *end_livro = buscar_endereco(estoque, titulo);
+
+        cout << "Editar livro" << endl;
+
+        cout<<"Informe o titulo do livro: ";
+        cin >> end_livro->livro.titulo;
+
+        cout << "Informe o nome do autor: ";
+        cin >> end_livro->livro.autor;
+
+        cout << "Informe o preço do livro: ";
+        cin >> end_livro->livro.preco;
+
+        cout << "Informe a quantidade de livros disponíveis: ";
+        cin >> end_livro->livro.quant; 
+
+        cout << endl << "Livro editado com sucesso." << endl;
+    }
 }
+
 
 void excluir_livro() {
 
@@ -172,6 +206,7 @@ int main() {
         case 4:
             cout << endl << "Por favor, informe o titulo do livro: ";
             cin >> titulo;
+            editar_livro(estoque, titulo);
         
             break;
 
