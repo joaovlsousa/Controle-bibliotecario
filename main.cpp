@@ -41,7 +41,7 @@ Livro livro_existe(Acervo *estoque, string titulo) {
             pos = pos->prox; 
         
     } while (pos != NULL);
-    
+
     Livro livro_inexistente = { .quant = -1 };
 
     return livro_inexistente;
@@ -148,20 +148,41 @@ void editar_livro(Acervo *estoque, string titulo) {
 
     else {
         Acervo *end_livro = buscar_endereco(estoque, titulo);
+        char op;
 
         cout << "Editar livro" << endl;
 
-        cout<<"Informe o titulo do livro: ";
-        cin >> end_livro->livro.titulo;
+        cout << "Quer editar o titulo? (s/n): ";
+        cin >> op;
 
-        cout << "Informe o nome do autor: ";
-        cin >> end_livro->livro.autor;
+        if (op == 's') {
+            cout<<"Informe um novo titulo: ";
+            cin >> end_livro->livro.titulo;
+        }
 
-        cout << "Informe o preço do livro: ";
-        cin >> end_livro->livro.preco;
+        cout << "Quer editar o autor? (s/n): ";
+        cin >> op;
 
-        cout << "Informe a quantidade de livros disponíveis: ";
-        cin >> end_livro->livro.quant; 
+        if (op == 's') {
+            cout << "Informe um novo autor: ";
+            cin >> end_livro->livro.autor;
+        }
+
+        cout << "Quer editar o preço? (s/n): ";
+        cin >> op;
+
+        if (op == 's') {
+            cout << "Informe um novo preço: ";
+            cin >> end_livro->livro.preco;
+        }
+
+        cout << "Quer editar a quantidade? (s/n): ";
+        cin >> op;
+
+        if (op == 's') {
+            cout << "Informe uma nova quantidade de livros disponíveis: ";
+            cin >> end_livro->livro.quant;
+        }
 
         cout << endl << "Livro editado com sucesso." << endl;
     }
