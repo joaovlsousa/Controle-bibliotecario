@@ -14,13 +14,15 @@ struct Livro {
 struct Acervo {
     Livro livro;
     Acervo *prox;
+    Acervo *ant;
 };
 
-//  FUNÇÕES UTILITÁRIAS
+// FUNÇÕES UTILITÁRIAS
 
 Acervo * criar_Acervo() {
     return NULL;
 }
+
 
 void imprimir_livro(Livro livro) {
     cout << endl << "-------------------------------------------" << endl;
@@ -42,7 +44,8 @@ Livro livro_existe(Acervo *estoque, string titulo) {
         
     } while (pos != NULL);
 
-    Livro livro_inexistente = { .quant = -1 };
+    Livro livro_inexistente;
+    livro_inexistente.quant = -1;
 
     return livro_inexistente;
 }
@@ -56,7 +59,7 @@ Acervo * buscar_endereco(Acervo *estoque, string titulo) {
     return pos;
 }
 
-//FUNÇÕES
+// FUNÇÕES
 
 void menu() {
     cout << endl << "---------- Sistema Bibliotecário ----------" << endl;
@@ -74,7 +77,8 @@ void anexar_livro(Acervo *&estoque, Livro livro) {
     Acervo *novo_livro = new Acervo;
     novo_livro->livro = livro;
     novo_livro->prox = NULL;
-    
+    novo_livro->ant = NULL;
+
     if (estoque == NULL) 
         estoque = novo_livro;
 
@@ -84,7 +88,8 @@ void anexar_livro(Acervo *&estoque, Livro livro) {
         while(pos->prox != NULL) 
             pos = pos->prox;
 
-        pos->prox = novo_livro;     
+        pos->prox = novo_livro;
+        novo_livro->ant = pos;    
     }
 }
 
@@ -115,7 +120,7 @@ void cadastrar_livro(Acervo *&estoque) {
 
 void listar_livros(Acervo *estoque) {
     if (estoque == NULL)
-        cout << endl << "Nenhum Livro cadastrado." << endl;
+        cout << "Nenhum Livro cadastrado." << endl;
 
     else {
         Acervo *pos = estoque;
@@ -189,8 +194,40 @@ void editar_livro(Acervo *estoque, string titulo) {
 }
 
 
-void excluir_livro() {
+Acervo *excluir_livro(Acervo *&estoque, string titulo) {
+    Livro checar_livro = livro_existe(estoque, titulo);
 
+    if(checar_livro.quant < 0)
+        return NULL;
+        
+    else {
+        Acervo *pos = buscar_endereco(estoque, titulo);
+
+        if (pos->ant == NULL && pos->prox == NULL) {
+            estoque = NULL;
+
+            return pos;
+        } 
+        else if (pos->ant == NULL) {
+            estoque = estoque->prox;
+            estoque->ant = NULL;
+            
+            return pos;
+        } 
+        else if (pos->prox == NULL) {
+            pos->ant->prox = NULL;
+            
+            return pos;
+        } 
+        else {
+            pos->ant->prox = pos->prox;
+            pos->prox->ant = pos->ant;
+            
+            return pos;
+        } 
+    }
+
+    return NULL;
 }
 
 
@@ -232,8 +269,23 @@ int main() {
             break;
 
         case 5:
-            cout << endl << "Por favor, informe o titulo do livro: ";
-            cin >> titulo;
+            if (estoque == NULL)
+                cout << endl << "Estoque vazio." << endl;
+
+            else {
+                cout << endl << "Por favor, informe o titulo do livro: ";
+                cin >> titulo;
+                Acervo *livro_excluido = excluir_livro(estoque, titulo);
+                
+                if (livro_excluido == NULL)
+                    cout << "O livro não existe no estoque";
+                
+                else {
+                    cout << endl << "Livro: " << titulo << " Exclído com sucesso. " << endl;
+                    delete livro_excluido;
+            }
+            }
+            
 
             break;
         }
