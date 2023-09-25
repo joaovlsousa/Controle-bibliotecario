@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -23,6 +24,26 @@ Acervo * criar_Acervo() {
     return NULL;
 }
 
+string ** criar_menu() {
+    string **mat = new string *[6];
+
+    string opcoes_menu[] = {
+        "Sair do sistema",
+        "Cadastrar um novo livro", 
+        "Listar todos os livros", 
+        "Buscar um livro",
+        "Editar um livro",
+        "Excluir um livro",
+    };
+
+    for (int i = 0; i < 6; i++) {
+        mat[i] = new string[2];
+        mat[i][0] = to_string(i);
+        mat[i][1] = opcoes_menu[i];
+    }
+
+    return mat;
+}
 
 void imprimir_livro(Livro livro) {
     cout << endl << "-------------------------------------------" << endl;
@@ -61,14 +82,15 @@ Acervo * buscar_endereco(Acervo *estoque, string titulo) {
 
 // FUNÇÕES
 
-void menu() {
+void mostrar_menu() {
+    string **mat = criar_menu();
+
     cout << endl << "---------- Sistema Bibliotecário ----------" << endl;
-    cout << "1 - Cadastrar um novo livro" << endl;
-    cout << "2 - Listar todos os livros" << endl;
-    cout << "3 - Buscar um livro" << endl;
-    cout << "4 - Editar um livro" << endl;
-    cout << "5 - Excluir um livro" << endl;
-    cout << "0 - Sair do sistema" << endl;
+
+    for (int i = 0; i < 6; i++) {
+        cout << mat[i][0] << " - " << mat[i][1] << endl; 
+    }
+
     cout << "-------------------------------------------" << endl;
 }
 
@@ -239,7 +261,7 @@ int main() {
     cout << endl << "Bem-vindo ao controle bibliotecário" << endl;
 
     do {
-        menu();
+        mostrar_menu();
         cin >> op;
 
         switch (op)
@@ -283,16 +305,17 @@ int main() {
                 else {
                     cout << endl << "Livro: " << titulo << " Exclído com sucesso. " << endl;
                     delete livro_excluido;
+                }
             }
-            }
-            
 
             break;
         }
 
     } while (op != 0);
 
-    cout << "Encerrando a execução do programa...";    
+    cout << "Encerrando a execução do programa...";
+
+    delete estoque;  
 
     return 0;
 }
